@@ -1,3 +1,62 @@
 = Bitpay
 
-This project rocks and uses MIT-LICENSE.
+Bitpay::Integration.new(:subject => 'name', :body => 'body', :total_fee => 'total_fee', :out_trade_no => '0001', :return_url => 'return_url', :notify_url => 'notify_url', :input_charset => 'utf-8')
+
+AliPay:
+  Request:
+service  接口名称 create_direct_pay_by_user
+partner
+_input_charset
+sign_type => DSA、RSA、MD5
+sign
+
+out_trade_ no
+subject
+payment_t ype   取值范围请参见附录“12.5 收款 类型”。 默认值为:1(商品购买)
+
+notify_url
+return_url
+
+error_notify_url
+seller_email   seller_id>seller_account_name> seller_email。 seller_id,seller_account_name 和 seller_email 不能全部为空,至 少有一项不为空
+buyer_email
+buyer_id
+seller_acco unt_name
+buyer_acc ount_name
+price
+quantity
+total_fee
+body
+show_url
+paymethod bankPay(网银支付) cartoon(卡通) creditPay(信用支付) directPay(余额支付) CASH(网点支付)
+defaultbank
+need_ctu_check
+royalty_type
+royalty_parameters
+anti_phishing_key
+
+
+ Response:
+    获取众多返回数据中最重要的数据,如:订单号(参数 out_trade_no)
+    订单名称(参 数 subject)
+    订单描述(参数 body)
+    订单总金额(参数 total_fee)
+    交易状态(参数 trade_status)
+    支付宝交易号(参数 trade_no)
+
+
+
+
+MerId:808080580006302
+OrdId:0000063020046995
+TransAmt:000000010000
+CuryId:156
+TransDate:20111108
+TransType:0001
+Version:20040916
+BgRetUrl:http://www.qingfanqie.com/ChinaPay/Chinapay_Bgreturn.aspx
+PageRetUrl:http://www.qingfanqie.com/ChinaPay/Chinapay_Pgreturn.aspx
+GateId:8607
+Priv1:20111108210725
+ChkValue:6C85BA5378DBCFD8D4C42A363EC63C0258CE0290FBA064F284A7465BBA84BAF7AE47D7A1EBB20793BAD472C545900B7DC6A5E8C6E1EBCD803DEAB3B387CC32E79FC148E6CCEC94892963D2B97F7426D35EA7DB56ED69347AEA9874213E44C769FFDCBC0E08649E3C21B5A71E9B2EC6D4C90D2681034762ADCC66B26DAF2A9138
+out_trade_no:20111108210725
