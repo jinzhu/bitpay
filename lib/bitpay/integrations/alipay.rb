@@ -6,7 +6,7 @@ module BitpayExt::Integration
                      [['price', 'quantity'], 'total_fee']
                    ]
 
-    attribute_alias { :service => :pay_type, :partner => :merchant_id, :_input_charset => :input_charset, :out_trade_no => :order_id, :defaultbank => :default_bank, :exter_invoke_ip => :buyer_ip }
+    attributes_alias :service => :pay_type, :partner => :merchant_id, :_input_charset => :input_charset, :out_trade_no => :order_id, :defaultbank => :default_bank, :exter_invoke_ip => :buyer_ip
 
     default_value_for :payment_type, 1
     default_value_for :sign_type, "MD5"
