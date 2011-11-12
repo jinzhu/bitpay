@@ -4,10 +4,15 @@ module BitpayExt::Integration
     @@attributes_alias_list, @@required_attrs_list, @@default_value_list = {}, [], {}
 
     def initialize(opt={})
-      self.options = opt.with_indifferent_access
+      self.options = opt.merge(BitpayExt.load_config(self)).with_indifferent_access
     end
 
     private
+    def self.basename(name=nil)
+      @@basename = name if name.present?
+      @@basename
+    end
+
     def self.define_attribute(attr)
       define_method(attr) do |&blk|
         default_value = @@default_value_list[attr]
