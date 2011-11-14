@@ -14,13 +14,12 @@ module BitpayExt::Integration
     end
 
     def self.define_attribute(attr)
-      define_method(attr) do |stop_loop = false|
+      define_method(attr) do
         default_value = @@default_value_list[attr]
         alias_attr = @@attributes_alias_list.select {|key,value| value.to_s == attr }
         alias_attr = (alias_attr && alias_attr.keys[0]) || @@attributes_alias_list[attr]
 
-        options[attr] || (default_value.is_a?(Proc) ? default_value.call : default_value) ||
-          ((stop_loop || alias_attr.blank?) ? nil : self.send(alias_attr, true))
+        options[attr] || (default_value.is_a?(Proc) ? default_value.call : default_value) || alias_attr.blank? ? nil : options[alias_attr]
       end
 
       define_method("#{attr}=") do |value|
@@ -63,7 +62,7 @@ module BitpayExt::Integration
       subject body order_id order_date expire_date amount display_amount
       return_url notify_url error_notify_url show_url
       pay_type payment_type sign_type input_charset currency language version merchant_id merchant_key gate_id
-      price quantity paymethod default_bank
+      price quantity paymethod default_bank merchant_param
       buyer_id buyer_account_name buyer_email buyer_phone buyer_mobile buyer_ip
       seller_id seller_account_name seller_email
     ).map do |attr|
@@ -97,8 +96,12 @@ module BitpayExt::Integration
       required_attrs_have_value
     end
 
+    def suggestion_attrs
+      self.class.suggestion_attrs + (options[:addition_attributes] || []) - (options[:ignore_attributes] || [])
+    end
+
     def available_attrs
-      (required_attrs + self.class.suggestion_attrs).select {|x| send(x).present? }
+      (required_attrs + suggestion_attrs).select {|x| send(x).present? }
     end
   end
 end

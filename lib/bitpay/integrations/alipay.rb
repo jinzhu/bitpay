@@ -18,6 +18,7 @@ module BitpayExt::Integration
     suggestion_attrs %w(notify_url return_url error_notify_url show_url merchant_param body)
 
     def generate_params
+      available_attrs
     end
 
     def sign
