@@ -4,7 +4,9 @@ module BitpayExt::Integration
     @@attributes_alias_list, @@required_attrs_list, @@suggestion_attrs, @@default_value_list = {}, [], [], {}
 
     def initialize(opt={})
-      self.options = opt.merge(BitpayExt.load_config(self)).with_indifferent_access
+      default_opt  = {:test_mode => false}
+      opt          = default_opt.merge(opt.merge(BitpayExt.load_config(self)))
+      self.options = opt.with_indifferent_access
     end
 
     private
@@ -19,7 +21,7 @@ module BitpayExt::Integration
         alias_attr = @@attributes_alias_list.select {|key,value| value.to_s == attr }
         alias_attr = (alias_attr && alias_attr.keys[0]) || @@attributes_alias_list[attr]
 
-        options[attr] || (default_value.is_a?(Proc) ? default_value.call : default_value) || alias_attr.blank? ? nil : options[alias_attr]
+        options[attr] || (default_value.is_a?(Proc) ? default_value.call : default_value) || (alias_attr.blank? ? nil : options[alias_attr])
       end
 
       define_method("#{attr}=") do |value|
@@ -60,7 +62,7 @@ module BitpayExt::Integration
     public
     %w(
       subject body order_id order_date expire_date amount display_amount
-      return_url notify_url error_notify_url show_url
+      gateway_url return_url notify_url error_notify_url show_url
       pay_type payment_type sign_type input_charset currency language version merchant_id merchant_key gate_id
       price quantity paymethod default_bank merchant_param
       buyer_id buyer_account_name buyer_email buyer_phone buyer_mobile buyer_ip
@@ -100,8 +102,8 @@ module BitpayExt::Integration
       self.class.suggestion_attrs + (options[:addition_attributes] || []) - (options[:ignore_attributes] || [])
     end
 
-    def available_attrs
-      (required_attrs + suggestion_attrs).select {|x| send(x).present? }
+    def available_attrs(opt={})
+      (required_attrs + suggestion_attrs - (opt[:skip] || [])).select {|x| send(x).present? }
     end
   end
 end

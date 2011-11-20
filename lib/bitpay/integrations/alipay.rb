@@ -1,8 +1,10 @@
+require 'digest/md5'
+
 module BitpayExt::Integration
   class Alipay < Base
     basename 'alipay'
 
-    required_attrs %w(service partner _input_charset sign_type sign out_trade_no subject payment_type)
+    required_attrs %w(service partner _input_charset sign_type out_trade_no subject payment_type)
     required_attrs [
                      ['seller_id','seller_account_name','seller_email'],
                      ['total_fee', ['price', 'quantity']]
@@ -14,15 +16,26 @@ module BitpayExt::Integration
     default_value_for :sign_type, "MD5"
     default_value_for :input_charset, "utf-8"
     default_value_for :pay_type, "create_direct_pay_by_user"
+    default_value_for :gateway_url, "https://www.alipay.com/cooperate/gateway.do"
 
     suggestion_attrs %w(notify_url return_url error_notify_url show_url merchant_param body)
 
-    def generate_params
-      available_attrs
+    def generated_params_for_sign
+      available_attrs(:skip => ['sign','sign_type']).sort.inject([]) do |s, a|
+        s << "#{a}=#{URI.escape(send(a).to_s)}"
+      end.join("&")
+    end
+
+    def generated_params
+      generated_params_for_sign + "&sign_type=#{sign_type}&sign=#{sign}"
+    end
+
+    def checkout_url
+      "#{gateway_url}?#{generated_params}"
     end
 
     def sign
-      "FIXME"
+      Digest::MD5.hexdigest(generated_params_for_sign)
     end
   end
 end
