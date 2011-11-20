@@ -71,7 +71,7 @@ module BitpayExt::Integration
 
     def errors
       required_attrs
-      @errors
+      @errors.sort
     end
 
     def valid?
@@ -83,14 +83,14 @@ module BitpayExt::Integration
       required_attrs_have_value = []
       self.class.required_attrs.map do |attr|
         if attr.is_a? String
-          send(attr).present? ? (required_attrs_have_value << attr) : (@errors << "No value for required attribute: #{attr}")
+          send(attr).present? ? (required_attrs_have_value << attr) : (@errors << "#{attr}: No value for required attribute")
         else attr.is_a? Array
           r_size = required_attrs_have_value.size
           attr.map do |att|
             required_attrs_have_value << att if att.is_a?(String) && send(att).present?
             required_attrs_have_value.concat att if att.is_a?(Array) && att.all? {|at| send(at).present? }
           end
-          @errors << "No value for required attribute: #{attr.inspect}" unless required_attrs_have_value.size > r_size
+          @errors << "#{attr}: No value for required attribute" unless required_attrs_have_value.size > r_size
         end
       end
       required_attrs_have_value
