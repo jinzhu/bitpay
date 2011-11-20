@@ -1,4 +1,4 @@
 alipay:
   merchant_id: '2028009283416372'
-  merchant_sign_key: 'znx1cza94de1dmc775z18aljl5scg5z8'
+  merchant_key: 'znx1cza94de1dmc775z18aljl5scg5z8'
   seller_email: 'example@alipay.com'

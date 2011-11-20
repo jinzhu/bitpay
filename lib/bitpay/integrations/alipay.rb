@@ -35,7 +35,7 @@ module BitpayExt::Integration
     end
 
     def sign
-      Digest::MD5.hexdigest(generated_params_for_sign)
+      Digest::MD5.hexdigest(generated_params_for_sign + merchant_key)
     end
   end
 end
