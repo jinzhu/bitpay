@@ -1,17 +1,22 @@
 = Bitpay
 
-Bitpay::Integration.new(:subject => 'name', :body => 'body', :total_fee => 'total_fee', :out_trade_no => '0001', :return_url => 'return_url', :notify_url => 'notify_url', :input_charset => 'utf-8')
+=== Checkout
 
-MerId:808080580006302
-OrdId:0000063020046995
-TransAmt:000000010000
-CuryId:156
-TransDate:20111108
-TransType:0001
-Version:20040916
-BgRetUrl:http://www.qingfanqie.com/ChinaPay/Chinapay_Bgreturn.aspx
-PageRetUrl:http://www.qingfanqie.com/ChinaPay/Chinapay_Pgreturn.aspx
-GateId:8607
-Priv1:20111108210725
-ChkValue:6C85BA5378DBCFD8D4C42A363EC63C0258CE0290FBA064F284A7465BBA84BAF7AE47D7A1EBB20793BAD472C545900B7DC6A5E8C6E1EBCD803DEAB3B387CC32E79FC148E6CCEC94892963D2B97F7426D35EA7DB56ED69347AEA9874213E44C769FFDCBC0E08649E3C21B5A71E9B2EC6D4C90D2681034762ADCC66B26DAF2A9138
-out_trade_no:20111108210725
+Bitpay::Checkout.new('alipay', subject: 'name', total_fee: 100.00, out_trade_no: '0001')
+
+=== Return URL
+
+Bitpay::Return.new('alipay', "http://www.xxx.com/alipay/return_url?partner=2088101011913539&buyer_email=tstable01@alipay.com&buyer_id=2088002007018955&seller_email=alipay-test01@alipay.com&seller_id=2088002007018966&out_trade_no=6402757654153618&error_code=ILLEGAL_EXTRA_COMMON_PARAM&return_url=http%3a%2f%2fapi.test.alipay.net%2fatinterface%2freceive_notify.htm")
+
+=== Notify URL
+
+Bitpay::Notification.new('alipay', "http://www.xxx.com/alipay/notify_url?partner=2088101011913539&buyer_email=tstable01@alipay.com&buyer_id=2088002007018955&seller_email=alipay-test01@alipay.com&seller_id=2088002007018966&out_trade_no=6402757654153618&error_code=ILLEGAL_EXTRA_COMMON_PARAM&return_url=http%3a%2f%2fapi.test.alipay.net%2fatinterface%2freceive_notify.htm")
+
+=== Verify Order
+
+Bitpay::Verify.new('alipay', notify_id: 'RqPnCoPT3K9%252Fvwbh3I%252BFioE227')
+
+
+=== Refund Order
+
+Bitpay::Refund.new('alipay')
