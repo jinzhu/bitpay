@@ -2,7 +2,7 @@ require 'test_helper'
 
 class BitpayTest < ActiveSupport::TestCase
   test "Alipay integration" do
-    pay = BitpayExt::Integration::Alipay.new(out_trade_no: '111111', subject: 'subject', amount: 100.00)
+    pay = Bitpay::Checkout.new('alipay', subject: 'name', amount: 100.00, order_id: '111111')
 
     assert pay.valid?, "checking Alipay valid or not"
 

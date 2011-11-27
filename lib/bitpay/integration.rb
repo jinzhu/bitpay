@@ -1,7 +1,7 @@
 module BitpayExt::Integration
   class Base
     attr_accessor :options
-    @@attributes_alias_list, @@required_attrs_list, @@suggestion_attrs, @@default_value_list = {}, [], [], {}
+    @@attributes_alias_list, @@required_attrs_list, @@suggestion_attrs, @@default_value_list, @@basename = {}, [], [], {}, nil
 
     def initialize(opt={})
       default_opt  = {:test_mode => false}
@@ -13,6 +13,14 @@ module BitpayExt::Integration
     def self.basename(name=nil)
       @@basename = name if name.present?
       @@basename
+    end
+
+    def self.get_const_with_name(name)
+      BitpayExt::Integration.constants.select do |x|
+        const = BitpayExt::Integration.const_get(x)
+        return const if const.class_variable_get("@@basename").to_s.downcase == name.to_s.downcase
+      end
+      nil
     end
 
     def self.define_attribute(attr)

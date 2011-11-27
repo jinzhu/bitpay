@@ -6,7 +6,7 @@ module BitpayExt
     # Load Base
     require "bitpay/integration"
 
-    Dir[File.dirname(__FILE__) + '/bitpay/*/*.rb'].each do |f|
+    Dir[File.dirname(__FILE__) + '/bitpay/integrations/*.rb'].each do |f|
       require f
     end
   end
