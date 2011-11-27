@@ -2,7 +2,7 @@
 
 === Checkout
 
-Bitpay::Checkout.new('alipay', subject: 'name', total_fee: 100.00, out_trade_no: '0001')
+Bitpay::Checkout.new('alipay', subject: 'name', amount: 100.00, order_id: '0001')
 
 === Return URL
 

@@ -1,11 +1,13 @@
+require 'digest/md5'
+require 'active_support/core_ext/hash/indifferent_access'
+
 module BitpayExt
   module Integration
     # Load Base
-    autoload :Base, "bitpay/integration"
+    require "bitpay/integration"
 
-    Dir[File.dirname(__FILE__) + '/bitpay/integrations/*.rb'].each do |f|
-      klass = File.basename(f, '.rb').gsub(/(?:^|_)(.)/) { $1.upcase }.to_sym
-      autoload klass, f
+    Dir[File.dirname(__FILE__) + '/bitpay/*/*.rb'].each do |f|
+      require f
     end
   end
 

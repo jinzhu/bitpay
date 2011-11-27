@@ -1,7 +1,5 @@
-require 'digest/md5'
-
-module BitpayExt::Integration
-  class Alipay < Base
+module BitpayExt::Integration::Alipay
+  class Checkout < BitpayExt::Integration::Base
     basename 'alipay'
 
     required_attrs %w(service partner _input_charset sign_type out_trade_no subject payment_type)
