@@ -16,8 +16,7 @@ module BitpayExt
     Rails.logger.debug str
   end
 
-  def self.load_config(obj)
-    name   = obj.class.basename
+  def self.load_config(name)
     config = File.join(Rails.root, 'config/bitpay.yml')
     File.exist?(config) ? (YAML.load_file(config).with_indifferent_access[name] || {}) : {}
   end

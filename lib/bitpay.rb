@@ -9,7 +9,8 @@ class Bitpay
     const      = BitpayExt::Integration::Base.get_const_with_name(name)
     const.try(:const_get, method_name.to_sym).try(:new, options)
   rescue
-    puts "ERROR: #{name} doesn't support #{method_name}!"
+    puts $!
+    puts "ERROR: seems #{name} doesn't support #{method_name}!"
     false
   end
 

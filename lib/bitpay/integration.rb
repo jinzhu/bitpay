@@ -5,16 +5,12 @@ module BitpayExt::Integration
 
     def initialize(opt={})
       default_opt  = {:test_mode => false}
-      opt          = default_opt.merge(opt.merge(BitpayExt.load_config(self)))
+      name         = self.class.parent.class_variable_get("@@basename")
+      opt          = default_opt.merge(opt.merge(BitpayExt.load_config(name)))
       self.options = opt.with_indifferent_access
     end
 
     private
-    def self.basename(name=nil)
-      @@basename = name if name.present?
-      @@basename
-    end
-
     def self.get_const_with_name(name)
       BitpayExt::Integration.constants.select do |x|
         const = BitpayExt::Integration.const_get(x)
