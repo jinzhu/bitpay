@@ -2,21 +2,21 @@
 
 === Checkout
 
-Bitpay::Checkout.new('alipay', subject: 'name', amount: 100.00, order_id: '0001')
+Bitpay::Checkout('alipay', subject: 'name', amount: 100.00, order_id: '0001')
 
 === Return URL
 
-Bitpay::Return.new('alipay', "http://www.xxx.com/alipay/return_url?partner=2088101011913539&buyer_email=tstable01@alipay.com&buyer_id=2088002007018955&seller_email=alipay-test01@alipay.com&seller_id=2088002007018966&out_trade_no=6402757654153618&error_code=ILLEGAL_EXTRA_COMMON_PARAM&return_url=http%3a%2f%2fapi.test.alipay.net%2fatinterface%2freceive_notify.htm")
+Bitpay::Return('alipay', "http://www.xxx.com/alipay/return_url?partner=2088101011913539&buyer_email=tstable01@alipay.com&buyer_id=2088002007018955&seller_email=alipay-test01@alipay.com&seller_id=2088002007018966&out_trade_no=6402757654153618&error_code=ILLEGAL_EXTRA_COMMON_PARAM&return_url=http%3a%2f%2fapi.test.alipay.net%2fatinterface%2freceive_notify.htm")
 
 === Notify URL
 
-Bitpay::Notification.new('alipay', "http://www.xxx.com/alipay/notify_url?partner=2088101011913539&buyer_email=tstable01@alipay.com&buyer_id=2088002007018955&seller_email=alipay-test01@alipay.com&seller_id=2088002007018966&out_trade_no=6402757654153618&error_code=ILLEGAL_EXTRA_COMMON_PARAM&return_url=http%3a%2f%2fapi.test.alipay.net%2fatinterface%2freceive_notify.htm")
+Bitpay::Notification('alipay', "http://www.xxx.com/alipay/notify_url?partner=2088101011913539&buyer_email=tstable01@alipay.com&buyer_id=2088002007018955&seller_email=alipay-test01@alipay.com&seller_id=2088002007018966&out_trade_no=6402757654153618&error_code=ILLEGAL_EXTRA_COMMON_PARAM&return_url=http%3a%2f%2fapi.test.alipay.net%2fatinterface%2freceive_notify.htm")
 
 === Verify Order
 
-Bitpay::Verify.new('alipay', notify_id: 'RqPnCoPT3K9%252Fvwbh3I%252BFioE227')
+Bitpay::Verify('alipay', notify_id: 'RqPnCoPT3K9%252Fvwbh3I%252BFioE227')
 
 
 === Refund Order
 
-Bitpay::Refund.new('alipay')
+Bitpay::Refund('alipay')

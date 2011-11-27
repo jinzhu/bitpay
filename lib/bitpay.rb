@@ -5,46 +5,19 @@ require "bitpay/engine"
 require 'uri'
 
 class Bitpay
-  attr_accessor :options, :name
-
-  def initialize(name=nil, opt={})
-    self.name, self.options = name, opt
-    const
-  end
-
-  def const
+  def self.const(method_name, name, options)
     const      = BitpayExt::Integration::Base.get_const_with_name(name)
-    class_name = Bitpay::Checkout.name.sub(/^#{Bitpay::Checkout.superclass.name}::/,'')
-    const.try(:const_get, class_name.to_sym).try(:new, options)
+    const.try(:const_get, method_name.to_sym).try(:new, options)
+  rescue
+    puts "ERROR: #{name} doesn't support #{method_name}!"
+    false
   end
 
-  class Checkout < Bitpay
-    def initialize(name=nil, opt={})
-      super
-    end
-  end
-
-  class Return < Bitpay
-    def initialize(name=nil, opt={})
-      super
-    end
-  end
-
-  class Notification < Bitpay
-    def initialize(name=nil, opt={})
-      super
-    end
-  end
-
-  class Verify < Bitpay
-    def initialize(name=nil, opt={})
-      super
-    end
-  end
-
-  class Refund < Bitpay
-    def initialize(name=nil, opt={})
-      super
-    end
+  %w(Checkout Return Notification Verify Refund).map do |method|
+    class_eval <<-RUBY
+       def self.#{method} name, options={}
+         const("#{method}", name, options)
+       end
+    RUBY
   end
 end
