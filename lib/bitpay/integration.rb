@@ -1,13 +1,15 @@
 module BitpayExt::Integration
   class Base
-    attr_accessor :options
+    attr_accessor :options, :raw_options
     @@attributes_alias_list, @@required_attrs_list, @@suggestion_attrs, @@default_value_list, @@basename = {}, [], [], {}, nil
 
     def initialize(opt={})
-      default_opt  = {:test_mode => false}
-      name         = self.class.parent.class_variable_get("@@basename")
-      opt          = default_opt.merge(opt.merge(BitpayExt.load_config(name)))
-      self.options = opt.with_indifferent_access
+      self.raw_options = opt
+      opt              = Rack::Utils.parse_query(opt) if opt.is_a? String
+      default_opt      = {:test_mode => false}
+      name             = self.class.parent.class_variable_get("@@basename")
+      opt              = default_opt.merge(BitpayExt.load_config(name).merge(opt))
+      self.options     = opt.with_indifferent_access
     end
 
     private
@@ -59,6 +61,8 @@ module BitpayExt::Integration
     end
 
     def method_missing(method_sym, *args, &block)
+      return self.class.parent.send(method_sym, self, *args) if self.class.parent.respond_to?(method_sym)
+
       BitpayExt.log "== Warning: #{self.class} haven't defined method `#{method_sym}`"
       options[method_sym]
     end
@@ -117,6 +121,7 @@ module BitpayExt::Integration
     %w(
       sign sign_type trade_id pay_type trade_status notify_id notify_time notify_type
       subject body order_id amount
+      payment_type merchant_id merchant_key gate_id
       buyer_id buyer_account_name buyer_email
       seller_id seller_account_name seller_email
     ).map do |attr|
@@ -126,7 +131,7 @@ module BitpayExt::Integration
 
   class Verify < Base
     %w(
-      notify_id
+      payment_type merchant_id merchant_key gate_id notify_id
     ).map do |attr|
       self.define_attribute(attr)
     end
@@ -136,6 +141,7 @@ module BitpayExt::Integration
     %w(
       sign sign_type trade_id pay_type trade_status notify_id notify_time notify_type
       subject body order_id amount
+      payment_type merchant_id merchant_key gate_id notify_id
       price quantity
       buyer_id buyer_account_name buyer_email
       seller_id seller_account_name seller_email

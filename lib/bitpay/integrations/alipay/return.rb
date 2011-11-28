@@ -7,6 +7,7 @@ module BitpayExt::Integration::Alipay
     end
 
     def valid?
+      generate_sign(raw_options) == sign
     end
   end
 end

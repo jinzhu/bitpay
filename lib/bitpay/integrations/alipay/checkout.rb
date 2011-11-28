@@ -31,7 +31,7 @@ module BitpayExt::Integration::Alipay
     end
 
     def sign
-      Digest::MD5.hexdigest(generated_params_for_sign + merchant_key)
+      generate_sign(generated_params_for_sign)
     end
   end
 end
