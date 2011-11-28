@@ -1,5 +1,5 @@
 module BitpayExt::Integration::Alipay
-  class Checkout < BitpayExt::Integration::Base
+  class Checkout < BitpayExt::Integration::Checkout
     required_attrs %w(service partner _input_charset sign_type out_trade_no subject payment_type)
     required_attrs [
                      ['seller_id','seller_account_name','seller_email'],

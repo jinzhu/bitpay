@@ -64,17 +64,6 @@ module BitpayExt::Integration
     end
 
     public
-    %w(
-      subject body order_id order_date expire_date amount display_amount
-      gateway_url return_url notify_url error_notify_url show_url
-      pay_type payment_type sign_type input_charset currency language version merchant_id merchant_key gate_id
-      price quantity paymethod default_bank merchant_param
-      buyer_id buyer_account_name buyer_email buyer_phone buyer_mobile buyer_ip
-      seller_id seller_account_name seller_email
-    ).map do |attr|
-      self.define_attribute(attr)
-    end
-
     def errors
       required_attrs
       @errors.sort
@@ -108,6 +97,50 @@ module BitpayExt::Integration
 
     def available_attrs(opt={})
       (required_attrs + suggestion_attrs - (opt[:skip] || [])).select {|x| send(x).present? }
+    end
+  end
+
+  class Checkout < Base
+    %w(
+      subject body order_id order_date expire_date amount display_amount
+      gateway_url return_url notify_url error_notify_url show_url
+      pay_type payment_type sign_type input_charset currency language version merchant_id merchant_key gate_id
+      price quantity paymethod default_bank merchant_param
+      buyer_id buyer_account_name buyer_email buyer_phone buyer_mobile buyer_ip
+      seller_id seller_account_name seller_email
+    ).map do |attr|
+      self.define_attribute(attr)
+    end
+  end
+
+  class Return < Base
+    %w(
+      sign sign_type trade_id pay_type trade_status notify_id notify_time notify_type
+      subject body order_id amount
+      buyer_id buyer_account_name buyer_email
+      seller_id seller_account_name seller_email
+    ).map do |attr|
+      self.define_attribute(attr)
+    end
+  end
+
+  class Verify < Base
+    %w(
+      notify_id
+    ).map do |attr|
+      self.define_attribute(attr)
+    end
+  end
+
+  class Notification < Base
+    %w(
+      sign sign_type trade_id pay_type trade_status notify_id notify_time notify_type
+      subject body order_id amount
+      price quantity
+      buyer_id buyer_account_name buyer_email
+      seller_id seller_account_name seller_email
+    ).map do |attr|
+      self.define_attribute(attr)
     end
   end
 end

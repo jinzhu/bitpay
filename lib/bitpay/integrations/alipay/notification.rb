@@ -1,5 +1,5 @@
 module BitpayExt::Integration::Alipay
-  class Notification < BitpayExt::Integration::Base
+  class Notification < BitpayExt::Integration::Notification
     attributes_alias :out_trade_no => :order_id, :exterface => :pay_type, :trade_no => :trade_id, :total_fee => :amount
 
     def success?
