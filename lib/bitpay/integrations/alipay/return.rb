@@ -3,10 +3,10 @@ module BitpayExt::Integration::Alipay
     attributes_alias :out_trade_no => :order_id, :exterface => :pay_type, :trade_no => :trade_id, :total_fee => :amount
 
     def success?
-      %w(TRADE_FINISHED TRADE_SUCCESS).include?(trade_status) && valid?
+      %w(TRADE_FINISHED TRADE_SUCCESS).include?(trade_status) && valid_sign?
     end
 
-    def valid?
+    def valid_sign?
       generate_sign(raw_options) == sign
     end
   end
