@@ -1,3 +1,4 @@
+require 'net/http'
 require 'digest/md5'
 require 'active_support/core_ext/hash/indifferent_access'
 

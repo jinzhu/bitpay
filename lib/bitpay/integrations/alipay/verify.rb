@@ -13,5 +13,9 @@ module BitpayExt::Integration::Alipay
     def url
       "#{gateway_url}?#{generated_params}"
     end
+
+    def valid?
+      Net::HTTP.get(URI(url)) =~ /true/
+    end
   end
 end

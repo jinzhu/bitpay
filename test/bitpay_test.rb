@@ -45,9 +45,13 @@ class BitpayTest < ActiveSupport::TestCase
     assert_equal pay.body, 		"Hello"
     assert_equal pay.amount, 	"10.00" #FIXME
 
-    assert_equal pay.pay_type, 'create_direct_pay_by_user'
-
 		assert_equal "205cc4b392447f1ae8d3b8b576b388a4", pay.generate_sign(pay.raw_options)
 		assert pay.success?
+	end
+
+  test "Alipay Verify" do
+    pay = Bitpay::Verify('alipay', :notify_id => "RqPnCoPT3K9%252Fvwbh3I%252BFioE227%252BPfNMl8jwyZqMIiXQWxhOCmQ5MQO%252FWd93rvCB%252BaiGg")
+
+    assert_equal pay.url, "https://www.alipay.com/cooperate/gateway.do?service=notify_verify&partner=2028009283416372&notify_id=RqPnCoPT3K9%252Fvwbh3I%252BFioE227%252BPfNMl8jwyZqMIiXQWxhOCmQ5MQO%252FWd93rvCB%252BaiGg"
 	end
 end

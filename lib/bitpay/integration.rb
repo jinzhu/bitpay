@@ -1,7 +1,22 @@
 module BitpayExt::Integration
   class Base
+    {:attributes_alias_list => {},:required_attrs_list => [],:suggestion_attrs_list => [],:default_value_list => {}}.map do |name,default_value|
+      instance_eval %Q{
+        def #{name}=(v)
+          @#{name} = v
+        end
+
+        def #{name}
+          @#{name} ||= default_value
+        end
+      }
+    end
+
     attr_accessor :options, :raw_options
-    @@attributes_alias_list, @@required_attrs_list, @@suggestion_attrs, @@default_value_list, @@basename = {}, [], [], {}, nil
+    class_inheritable_reader :attributes_alias_list, :required_attrs_list, :suggestion_attrs_list, :default_value_list
+    class_inheritable_writer :attributes_alias_list, :required_attrs_list, :suggestion_attrs_list, :default_value_list
+    self.attributes_alias_list, self.required_attrs_list, self.suggestion_attrs_list, self.default_value_list = {}, [], [], {}
+    @@basename = nil
 
     def initialize(opt={})
       self.raw_options = opt
@@ -23,9 +38,9 @@ module BitpayExt::Integration
 
     def self.define_attribute(attr)
       define_method(attr) do
-        default_value = @@default_value_list[attr]
-        alias_attr = @@attributes_alias_list.select {|key,value| value.to_s == attr }
-        alias_attr = (alias_attr && alias_attr.keys[0]) || @@attributes_alias_list[attr]
+        default_value = self.default_value_list[attr]
+        alias_attr = self.attributes_alias_list.select {|key,value| value.to_s == attr }
+        alias_attr = (alias_attr && alias_attr.keys[0]) || self.attributes_alias_list[attr]
 
         options[attr] || (default_value.is_a?(Proc) ? default_value.call : default_value) || (alias_attr.blank? ? nil : options[alias_attr])
       end
@@ -37,27 +52,27 @@ module BitpayExt::Integration
     end
 
     def self.required_attrs(attrs=[])
-      @@required_attrs_list.concat attrs
+      self.required_attrs_list.concat attrs
     end
 
     def self.suggestion_attrs(attrs=[])
-      @@suggestion_attrs.concat attrs
+      self.suggestion_attrs_list.concat attrs
     end
 
     def self.default_value_for(method_sym,value=nil,&block)
-      @@default_value_list[method_sym] = block_given? ? block : value
-      @@default_value_list = @@default_value_list.with_indifferent_access
+      self.default_value_list[method_sym] = block_given? ? block : value
+      self.default_value_list = self.default_value_list.with_indifferent_access
     end
 
     def self.attributes_alias(attrs={})
-      @@attributes_alias_list.update(attrs)
-      @@attributes_alias_list = @@attributes_alias_list.with_indifferent_access
+      self.attributes_alias_list.update(attrs)
+      self.attributes_alias_list = self.attributes_alias_list.with_indifferent_access
 
       attrs.map do |key, value|
         alias_method key.to_sym, value.to_sym
         alias_method "#{key}=".to_sym, "#{value}=".to_sym
       end
-      @@attributes_alias_list
+      self.attributes_alias_list
     end
 
     def method_missing(method_sym, *args, &block)
@@ -96,7 +111,7 @@ module BitpayExt::Integration
     end
 
     def suggestion_attrs
-      self.class.suggestion_attrs + (options[:addition_attributes] || []) - (options[:ignore_attributes] || [])
+      self.class.suggestion_attrs_list + (options[:addition_attributes] || []) - (options[:ignore_attributes] || [])
     end
 
     def available_attrs(opt={})
