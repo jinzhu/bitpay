@@ -1,5 +1,17 @@
 module BitpayExt::Integration::Alipay
   class Verify < BitpayExt::Integration::Verify
-    #https://www.alipay.com/cooperate/gateway.do?service=notify_verify&partner=2088002396712354&notify_id=RqPnCoPT3K9%252Fvwbh3I%252BFioE227%252BPfNMl8jwyZqMIiXQWxhOCmQ5MQO%252FWd93rvCB%252BaiGg
+    required_attrs %w(partner notify_id)
+
+    attributes_alias :partner => :merchant_id
+
+    default_value_for :gateway_url, "https://www.alipay.com/cooperate/gateway.do"
+
+    def generated_params
+      "service=notify_verify&partner=#{partner}&notify_id=#{notify_id}"
+    end
+
+    def url
+      "#{gateway_url}?#{generated_params}"
+    end
   end
 end

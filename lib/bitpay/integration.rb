@@ -131,7 +131,7 @@ module BitpayExt::Integration
 
   class Verify < Base
     %w(
-      payment_type merchant_id merchant_key gate_id notify_id
+      gateway_url merchant_id merchant_key notify_id
     ).map do |attr|
       self.define_attribute(attr)
     end
@@ -141,7 +141,7 @@ module BitpayExt::Integration
     %w(
       sign sign_type trade_id pay_type trade_status notify_id notify_time notify_type
       subject body order_id amount
-      payment_type merchant_id merchant_key gate_id notify_id
+      payment_type merchant_id merchant_key gate_id
       price quantity
       buyer_id buyer_account_name buyer_email
       seller_id seller_account_name seller_email
