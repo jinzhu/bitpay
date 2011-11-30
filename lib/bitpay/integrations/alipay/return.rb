@@ -9,5 +9,9 @@ module BitpayExt::Integration::Alipay
     def valid_sign?
       generate_sign(raw_options) == sign
     end
+
+    def valid_and_success?
+      success? && Bitpay::Verify('alipay', :notify_id => notify_id).valid?
+    end
   end
 end
