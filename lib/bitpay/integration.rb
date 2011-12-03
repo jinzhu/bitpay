@@ -26,10 +26,10 @@ module BitpayExt::Integration
     def self.define_attribute(attr)
       define_method(attr) do
         default_value = self.default_value_list[attr]
-        alias_attr = self.attributes_alias_list.select {|key,value| value.to_s == attr }
+        alias_attr = self.attributes_alias_list.select {|key,value| value.to_s == attr.to_s }
         alias_attr = (alias_attr && alias_attr.keys[0]) || self.attributes_alias_list[attr]
 
-        options[attr] || (default_value.is_a?(Proc) ? default_value.call : default_value) || (alias_attr.blank? ? nil : options[alias_attr])
+        options[attr] || (alias_attr.blank? ? nil : options[alias_attr]) || (default_value.is_a?(Proc) ? default_value.call : default_value)
       end
 
       define_method("#{attr}=") do |value|
