@@ -109,7 +109,7 @@ module BitpayExt::Integration
     %w(
       subject body order_id order_date expire_date amount display_amount
       gateway_url return_url notify_url error_notify_url show_url
-      pay_type payment_type sign_type input_charset currency language version merchant_id merchant_key gate_id
+      pay_type payment_type sign_type sign input_charset currency language version merchant_id merchant_key gate_id
       price quantity paymethod default_bank merchant_param
       buyer_id buyer_account_name buyer_email buyer_phone buyer_mobile buyer_ip
       seller_id seller_account_name seller_email
