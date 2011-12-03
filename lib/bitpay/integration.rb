@@ -1,20 +1,7 @@
 module BitpayExt::Integration
   class Base
-    {:attributes_alias_list => {},:required_attrs_list => [],:suggestion_attrs_list => [],:default_value_list => {}}.map do |name,default_value|
-      instance_eval %Q{
-        def #{name}=(v)
-          @#{name} = v
-        end
-
-        def #{name}
-          @#{name} ||= default_value
-        end
-      }
-    end
-
     attr_accessor :options, :raw_options
-    class_inheritable_reader :attributes_alias_list, :required_attrs_list, :suggestion_attrs_list, :default_value_list
-    class_inheritable_writer :attributes_alias_list, :required_attrs_list, :suggestion_attrs_list, :default_value_list
+    class_attribute :attributes_alias_list, :required_attrs_list, :suggestion_attrs_list, :default_value_list
     self.attributes_alias_list, self.required_attrs_list, self.suggestion_attrs_list, self.default_value_list = {}, [], [], {}
     @@basename = nil
 
@@ -52,11 +39,11 @@ module BitpayExt::Integration
     end
 
     def self.required_attrs(attrs=[])
-      self.required_attrs_list.concat attrs
+      self.required_attrs_list += attrs
     end
 
     def self.suggestion_attrs(attrs=[])
-      self.suggestion_attrs_list.concat attrs
+      self.suggestion_attrs_list += attrs
     end
 
     def self.default_value_for(method_sym,value=nil,&block)
@@ -65,8 +52,7 @@ module BitpayExt::Integration
     end
 
     def self.attributes_alias(attrs={})
-      self.attributes_alias_list.update(attrs)
-      self.attributes_alias_list = self.attributes_alias_list.with_indifferent_access
+      self.attributes_alias_list = self.attributes_alias_list.merge(attrs).with_indifferent_access
 
       attrs.map do |key, value|
         alias_method key.to_sym, value.to_sym
